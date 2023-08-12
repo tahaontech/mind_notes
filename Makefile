@@ -6,3 +6,6 @@ run: build
 
 test:
 	go test -v ./...
+
+install:
+	cd frontend&&npm install&&npm run build
