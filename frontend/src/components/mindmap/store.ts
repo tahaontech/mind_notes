@@ -12,7 +12,7 @@ import {
 import create from "zustand";
 import { nanoid } from "nanoid/non-secure";
 
-import { NodeData } from "../../components/MindMapNode";
+import { NodeData } from "./MindMapNode";
 
 export type RFState = {
   nodes: Node<NodeData>[];
@@ -20,7 +20,9 @@ export type RFState = {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   updateNodeLabel: (nodeId: string, label: string) => void;
+  deleteNode: (nodeId: string) => void;
   addChildNode: (parentNode: Node, position: XYPosition) => void;
+  canDelete: (nodeId: string) => boolean;
 };
 
 const useStore = create<RFState>((set, get) => ({
@@ -28,7 +30,7 @@ const useStore = create<RFState>((set, get) => ({
     {
       id: "root",
       type: "mindmap",
-      data: { label: "React Flow Mind Map" },
+      data: { label: "root node", root: true },
       position: { x: 0, y: 0 },
       dragHandle: ".dragHandle",
     },
@@ -56,11 +58,31 @@ const useStore = create<RFState>((set, get) => ({
       }),
     });
   },
+  canDelete : (nodeId: string) => {
+    const node = get().nodes.filter(n => n.id === nodeId)[0];
+    const childEdges = get().edges.filter(e => e.source === nodeId);
+    if (node.data.root === false && childEdges.length === 0) {
+      return true;
+    }
+    return false;
+  },
+  deleteNode: (nodeId: string) => {
+    const node = get().nodes.filter(n => n.id === nodeId)[0];
+    const childEdges = get().edges.filter(e => e.source === nodeId);
+    if (node.data.root === false && childEdges.length === 0) {
+      set({
+        nodes: get().nodes.filter(n => n.id !== nodeId ),
+        edges: get().edges.filter(e => e.target !== nodeId)
+      })
+    } else {
+      throw new Error('please delete child nodes first.')
+    }
+  },
   addChildNode: (parentNode: Node, position: XYPosition) => {
     const newNode = {
       id: nanoid(),
       type: "mindmap",
-      data: { label: "New Node" },
+      data: { label: "New Node", root: false },
       position,
       dragHandle: ".dragHandle",
       parentNode: parentNode.id,

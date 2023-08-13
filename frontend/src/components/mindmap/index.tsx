@@ -10,11 +10,11 @@ import ReactFlow, {
   Controls,
   Panel,
 } from "reactflow";
-import shallow from "zustand/shallow";
+import { shallow } from "zustand/shallow";
 
 import useStore, { RFState } from "./store";
-import MindMapNode from "../../components/MindMapNode";
-import MindMapEdge from "../../components/MindMapEdge";
+import MindMapNode from "./MindMapNode";
+import MindMapEdge from "./MindMapEdge";
 
 // we need to import the React Flow styles to make it work
 import "reactflow/dist/style.css";
@@ -127,7 +127,7 @@ function Flow() {
     >
       <Controls showInteractive={false} />
       <Panel position="top-left" className="header">
-        React Flow Mind Map
+        Mind Map
       </Panel>
     </ReactFlow>
   );

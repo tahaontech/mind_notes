@@ -17,6 +17,45 @@ body,
   color: #cdcdcd;
 }
 
+/* App.css */
+.app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #f1f1f1;
+  padding-left: 260px;
+}
+
+.sidebutton-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.sidebutton {
+  background-color: transparent;
+  color: white;
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  justify-content: flex-start;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.sidebutton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  font-weight: bold;
+}
+
+/* mindmap */
 .react-flow__node-mindmap {
   background: white;
   border-radius: 2px;
@@ -64,6 +103,16 @@ body,
   pointer-events: all;
 }
 
+.nodeIcon {
+  background: transparent;
+  width: 14px;
+  height: 100%;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  pointer-events: all;
+}
+
 .input {
   border: none;
   padding: 0 2px;
@@ -73,6 +122,7 @@ body,
   height: 100%;
   color: #222;
   pointer-events: none;
+  padding-right: 4px;
 }
 
 .input:focus {
@@ -80,4 +130,40 @@ body,
   outline: none;
   background: rgba(255, 255, 255, 0.25);
   pointer-events: all;
+}
+
+/* dialog */
+.dialog {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  text-align: center;
+}
+
+.dialog p {
+  margin: 0 0 20px;
+}
+
+.dialog button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dialog button.confirm {
+  background-color: #4285f4;
+  color: white;
+}
+
+.dialog button.cancel {
+  background-color: #f1f1f1;
+  color: #333;
 }
