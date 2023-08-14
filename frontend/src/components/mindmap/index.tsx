@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ReactFlow, {
   ConnectionLineType,
   NodeOrigin,
@@ -22,6 +22,7 @@ import "reactflow/dist/style.css";
 const selector = (state: RFState) => ({
   nodes: state.nodes,
   edges: state.edges,
+  init: state.init,
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   addChildNode: state.addChildNode,
@@ -40,9 +41,9 @@ const nodeOrigin: NodeOrigin = [0.5, 0.5];
 const connectionLineStyle = { stroke: "#F6AD55", strokeWidth: 3 };
 const defaultEdgeOptions = { style: connectionLineStyle, type: "mindmap" };
 
-function Flow() {
+function Flow({catId}: {catId: string}) {
   const store = useStoreApi();
-  const { nodes, edges, onNodesChange, onEdgesChange, addChildNode } = useStore(
+  const { nodes, edges, onNodesChange, onEdgesChange, addChildNode, init } = useStore(
     selector,
     shallow
   );
@@ -103,11 +104,30 @@ function Flow() {
 
         if (parentNode && childNodePosition) {
           addChildNode(parentNode, childNodePosition);
+          // call craete node API
+          const node = (event.target as Element).closest(".react-flow__node");
+          if (node) {
+            node.querySelector("input")?.focus({ preventScroll: true });
+          }
         }
       }
     },
     [getChildNodePosition]
   );
+
+  useEffect(() => {
+    console.log(catId)
+    // retrive nodes and edges based on catId API
+    const rootNode = {
+      id: "root",
+      type: "mindmap", // static in client
+      data: { label: "root node", root: true },
+      position: { x: 0, y: 0 },
+      dragHandle: ".dragHandle", // static in client
+    }
+    init([rootNode], []);
+  }, [])
+  
 
   return (
     <ReactFlow

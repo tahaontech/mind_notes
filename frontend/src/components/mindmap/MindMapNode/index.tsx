@@ -1,4 +1,4 @@
-import { useLayoutEffect, useEffect, useRef } from "react";
+import { useLayoutEffect, useEffect, useRef, useState } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
 
 import useStore from "../store";
@@ -18,6 +18,7 @@ export type NodeData = {
 
 function MindMapNode({ id, data }: NodeProps<NodeData>) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [focused, setFocused] = useState<boolean>(false);
   // store
   const updateNodeLabel = useStore((state) => state.updateNodeLabel);
   const canDelete = useStore((state) => state.canDelete);
@@ -87,6 +88,14 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
           style={rootStyle}
           onChange={(evt) => updateNodeLabel(id, evt.target.value)}
           className="input"
+          onFocus={() => setFocused(true)}
+          onBlur={() => {
+            if (focused) {
+              console.log('Triggered because this input lost focus', data.label);
+              // API update request
+              setFocused(false);
+            }
+          }}
           ref={inputRef}
         />
         <div onClick={() => handleDelete(id)}  className="nodeIcon">

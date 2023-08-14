@@ -6,7 +6,7 @@ const FormCloseIcon = () => {
       <path
         fill="none"
         stroke="#333"
-        stroke-width="2"
+        strokeWidth="2"
         d="m7 7 10 10M7 17 17 7"
       ></path>
     </svg>

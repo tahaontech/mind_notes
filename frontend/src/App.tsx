@@ -7,15 +7,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const isFlow = false;
+  const isFlow = true;
+  // render categories API
   return (
     <div className="app">
       <Sidebar>
         <h2>Main Titles</h2>
-        <button className="sidebutton">Philosophy</button>
+        <button className="sidebutton">Philosophy <button>export btn</button></button>
       </Sidebar>
       <div className="main-content">
-        {isFlow ? (<Flow />) : (<MDEditore id="fuck" />)}
+        {/* blank page */}
+        {isFlow ? (<Flow catId="PhilosophyId" />) : (<MDEditore id="fuck" />)}
       </div>
       <ConfirmDialog />
         <ToastContainer

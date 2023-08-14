@@ -2,7 +2,6 @@ package db
 
 import (
 	"database/sql"
-	"log"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -18,13 +17,15 @@ type PhotoDetail struct {
 	LastViewed int
 }
 
-func (d *DB) InitDB() {
+func InitDB() (*DB, error) {
 	db, err := sql.Open("sqlite3", "./data/app.db")
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	d.Database = db
+	d := &DB{
+		Database: db,
+	}
 
 	initStmt := `
 	CREATE TABLE IF NOT EXISTS PHOTOS (FILENAME string unique not null primary key, LAST_VIEWED int, TIME_TAKEN int )
@@ -32,8 +33,10 @@ func (d *DB) InitDB() {
 
 	_, err = d.Database.Exec(initStmt)
 	if err != nil {
-		log.Fatalf("%q: %s\n", err, initStmt)
+		return nil, err
 	}
+
+	return d, nil
 }
 
 func (d *DB) AddPhoto(name string, timeTaken int) error {

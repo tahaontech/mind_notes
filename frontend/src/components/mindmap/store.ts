@@ -9,7 +9,7 @@ import {
   applyEdgeChanges,
   XYPosition,
 } from "reactflow";
-import create from "zustand";
+import { create } from "zustand";
 import { nanoid } from "nanoid/non-secure";
 
 import { NodeData } from "./MindMapNode";
@@ -17,6 +17,7 @@ import { NodeData } from "./MindMapNode";
 export type RFState = {
   nodes: Node<NodeData>[];
   edges: Edge[];
+  init: (nodes: Node<NodeData>[], edges: Edge[]) => void;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   updateNodeLabel: (nodeId: string, label: string) => void;
@@ -26,16 +27,14 @@ export type RFState = {
 };
 
 const useStore = create<RFState>((set, get) => ({
-  nodes: [
-    {
-      id: "root",
-      type: "mindmap",
-      data: { label: "root node", root: true },
-      position: { x: 0, y: 0 },
-      dragHandle: ".dragHandle",
-    },
-  ],
+  nodes: [],
   edges: [],
+  init: (nodes: Node<NodeData>[], edges: Edge[]) => {
+    set({
+      nodes: nodes,
+      edges: edges
+    })
+  },
   onNodesChange: (changes: NodeChange[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),

@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/tahaontech/mind_notes/server"
+)
 
 func main() {
-	fmt.Println("Hello World!")
+	server.Start(":3000")
 }

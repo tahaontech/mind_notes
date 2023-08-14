@@ -13,7 +13,7 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   // };
 
   const isSidebarOpen = true;
-
+  // create category API
   return (
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
       <button className="toggle-button" onClick={() => {}}>

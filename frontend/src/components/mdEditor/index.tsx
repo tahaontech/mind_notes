@@ -13,6 +13,7 @@ type Props = {
 
 const MDEditore: React.FC<Props> = ({ id }: Props) => {
   const [input, setInput] = useState<string>("")
+  // render from API
   console.log(id);
   return (
     <div className="main">
