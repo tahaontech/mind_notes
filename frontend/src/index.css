@@ -26,6 +26,7 @@ body,
 
 .main-content {
   flex-grow: 1;
+  width: 80%;
   padding: 20px;
   background-color: #f1f1f1;
   padding-left: 260px;
