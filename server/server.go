@@ -1,8 +1,7 @@
 package server
 
 import (
-	"fmt"
-
+	"github.com/labstack/echo/v4"
 	"github.com/tahaontech/mind_notes/db"
 )
 
@@ -19,5 +18,13 @@ func NewServer(db *db.DB, addr string) *Server {
 }
 
 func (s *Server) Start() {
-	fmt.Printf("server starting on %s", s.addr)
+	e := echo.New()
+
+	// frontend
+	e.Static("/", "UI")
+	// images
+	e.Static("/images", "data/images")
+
+	// API's
+	e.Logger.Fatal(e.Start(s.addr))
 }
