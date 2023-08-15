@@ -5,6 +5,7 @@ import ReactFlow, {
   Node,
   OnConnectEnd,
   OnConnectStart,
+  OnMoveEnd,
   useReactFlow,
   useStoreApi,
   Controls,
@@ -115,6 +116,16 @@ function Flow({catId}: {catId: string}) {
     [getChildNodePosition]
   );
 
+  // TODO: add moveEnd event to update position
+  const onPositionChanged: OnMoveEnd = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      if (event instanceof MouseEvent) {
+        console.log("node movee", event.clientX)
+      }
+    },
+    []
+  )
+
   useEffect(() => {
     console.log(catId)
     // retrive nodes and edges based on catId API
@@ -137,6 +148,7 @@ function Flow({catId}: {catId: string}) {
       onEdgesChange={onEdgesChange}
       onConnectStart={onConnectStart}
       onConnectEnd={onConnectEnd}
+      onMoveEnd={onPositionChanged}
       nodeTypes={nodeTypes}
       edgeTypes={edgeTypes}
       nodeOrigin={nodeOrigin}

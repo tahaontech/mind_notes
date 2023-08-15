@@ -16,6 +16,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer database.Database.Close()
 
 	// start server
 	s := server.NewServer(database, ":3000")

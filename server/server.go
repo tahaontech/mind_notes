@@ -1,8 +1,11 @@
 package server
 
 import (
+	"net/http"
+
 	"github.com/labstack/echo/v4"
 	"github.com/tahaontech/mind_notes/db"
+	"github.com/tahaontech/mind_notes/types"
 )
 
 type Server struct {
@@ -26,5 +29,12 @@ func (s *Server) Start() {
 	e.Static("/images", "data/images")
 
 	// API's
+	api := e.Group("/api")
+	api.GET("roots", s.handleGetRoots)
 	e.Logger.Fatal(e.Start(s.addr))
+}
+
+func (s *Server) handleGetRoots(c echo.Context) error {
+
+	return c.JSON(http.StatusOK, types.OkResp{Msg: "ok babe :)"})
 }
