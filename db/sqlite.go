@@ -18,7 +18,7 @@ type PhotoDetail struct {
 }
 
 func InitDB() (*DB, error) {
-	db, err := sql.Open("sqlite3", "./data/app.db")
+	db, err := sql.Open("sqlite3", "data/app.db")
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,9 @@ func InitDB() (*DB, error) {
 	}
 
 	initStmt := `
-	CREATE TABLE IF NOT EXISTS PHOTOS (FILENAME string unique not null primary key, LAST_VIEWED int, TIME_TAKEN int )
+	CREATE TABLE IF NOT EXISTS node (id string unique not null primary key, label text, root bool, positionX float, positionY float );
+	CREATE TABLE IF NOT EXISTS edge (id string unique not null primary key, sourceId string foriegn key,  targetId string foriegn key );
+	CREATE TABLE IF NOT EXISTS document (id string unique not null primary key, nodeId string foriegn key, data text );
 	`
 
 	_, err = d.Database.Exec(initStmt)

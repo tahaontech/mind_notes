@@ -1,9 +1,16 @@
 package main
 
 import (
+	"log"
+
+	"github.com/tahaontech/mind_notes/db"
 	"github.com/tahaontech/mind_notes/server"
 )
 
 func main() {
-	server.Start(":3000")
+	database, err := db.InitDB()
+	if err != nil {
+		log.Fatal(err)
+	}
+	server.NewServer(database, ":3000")
 }
