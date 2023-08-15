@@ -23,9 +23,9 @@ type EdgeResp struct {
 
 // mind map response
 type MindMapResp struct {
-	Category string     `json:"category"` // rootID->label
-	Nodes    []NodeResp `json:"nodes"`
-	Edges    []EdgeResp `json:"edges"`
+	Category string      `json:"category"` // rootID->label
+	Nodes    []*NodeResp `json:"nodes"`
+	Edges    []*EdgeResp `json:"edges"`
 }
 
 // document responses

@@ -43,6 +43,27 @@ func (d *DB) DocumentAdd(req *types.CreateDocumentReq) error {
 	return err
 }
 
+func (d *DB) DocumentUpdate(req *types.UpdateDocumentReq) error {
+	tx, err := d.Database.Begin()
+	if err != nil {
+		return err
+	}
+
+	stmt, err := tx.Prepare("UPDATE document SET data = ? WHERE id = ?;")
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	_, err = stmt.Exec(req.Data, req.ID)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit()
+	return err
+}
+
 func (d *DB) DocumentDelete(nodeID string) error {
 	tx, err := d.Database.Begin()
 	if err != nil {

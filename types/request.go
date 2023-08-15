@@ -2,13 +2,22 @@ package types
 
 // Node Requests
 
-type CreateNodeReq struct {
+type CreateNoderootReq struct {
+	ID    string `json:"id"`
+	Label string `json:"label"`
+}
+
+type AddNodeReq struct {
+	// target
 	ID        string  `json:"id"`
 	Label     string  `json:"label"`
 	Root      bool    `json:"root"`
 	PositionX float32 `json:"positionX"`
 	PositionY float32 `json:"positionY"`
 	RootID    string  `json:"rootId"`
+	// edge
+	EdgeID   string `json:"edgeId"`
+	SourceID string `json:"sourceId"`
 }
 
 type UpdateNodeLabelReq struct {
