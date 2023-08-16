@@ -9,17 +9,24 @@ type Document struct {
 }
 
 func (d *DB) DocumentGetOne(nodeID string) (*types.DocumentResp, error) {
-	stm, err := d.Database.Prepare("select id, nodeId, data FROM document WHERE id = ?")
+	rows, err := d.Database.Query("SELECT id, nodeId, data FROM document WHERE nodeId = ?;", nodeID)
 	if err != nil {
 		return nil, err
 	}
-	defer stm.Close()
+	defer rows.Close()
 
-	resp := types.DocumentResp{}
+	for rows.Next() {
+		detail := types.DocumentResp{}
+		err := rows.Scan(&detail.ID, &detail.NodeID, &detail.Data)
+		if err != nil {
+			return nil, err
+		} else {
+			return &detail, nil
+		}
+	}
 
-	err = stm.QueryRow(nodeID).Scan(&resp.ID, &resp.NodeID, &resp.Data)
-
-	return &resp, err
+	err = rows.Err()
+	return nil, err
 }
 
 func (d *DB) DocumentAdd(req *types.CreateDocumentReq) error {
@@ -49,7 +56,7 @@ func (d *DB) DocumentUpdate(req *types.UpdateDocumentReq) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("UPDATE document SET data = ? WHERE id = ?;")
+	stmt, err := tx.Prepare("UPDATE document SET data = ? WHERE nodeId = ?;")
 	if err != nil {
 		return err
 	}
@@ -70,7 +77,7 @@ func (d *DB) DocumentDelete(nodeID string) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("DELETE document WHERE nodeId = ?;")
+	stmt, err := tx.Prepare("DELETE FROM document WHERE nodeId = ?;")
 	if err != nil {
 		return err
 	}

@@ -182,7 +182,7 @@ func (d *DB) NodeDelete(nodeID string) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("DELETE node WHERE id = ?;")
+	stmt, err := tx.Prepare("DELETE FROM node WHERE id = ?;")
 	if err != nil {
 		return err
 	}

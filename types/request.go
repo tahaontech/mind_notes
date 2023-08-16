@@ -49,6 +49,6 @@ type CreateDocumentReq struct {
 }
 
 type UpdateDocumentReq struct {
-	ID   string `json:"id"`
+	ID   string `json:"id"` // nodeId
 	Data string `json:"data"`
 }

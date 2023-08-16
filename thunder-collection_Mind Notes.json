@@ -1,7 +1,7 @@
 {
     "client": "Thunder Client",
     "collectionName": "Mind Notes",
-    "dateExported": "2023-08-15T14:32:46.411Z",
+    "dateExported": "2023-08-16T15:56:26.053Z",
     "version": "1.1",
     "folders": [],
     "requests": [
@@ -24,11 +24,25 @@
             "colId": "0234cf67-5410-4e73-b824-a950779083a0",
             "containerId": "",
             "name": "mindmap",
-            "url": "http://localhost:3000/api/mindmap/test1",
+            "url": "http://localhost:3000/api/mindmap/test2",
             "method": "GET",
             "sortNum": 15000,
             "created": "2023-08-15T14:30:51.172Z",
-            "modified": "2023-08-15T14:31:12.313Z",
+            "modified": "2023-08-16T15:45:44.172Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "8c830b35-2048-4fb5-8250-2090dc36833c",
+            "colId": "0234cf67-5410-4e73-b824-a950779083a0",
+            "containerId": "",
+            "name": "get doc",
+            "url": "http://localhost:3000/api/document/node1",
+            "method": "GET",
+            "sortNum": 17500,
+            "created": "2023-08-16T14:53:25.629Z",
+            "modified": "2023-08-16T15:53:33.328Z",
             "headers": [],
             "params": [],
             "tests": []
@@ -42,12 +56,12 @@
             "method": "POST",
             "sortNum": 20000,
             "created": "2023-08-15T14:21:01.553Z",
-            "modified": "2023-08-15T14:23:11.856Z",
+            "modified": "2023-08-16T15:27:17.218Z",
             "headers": [],
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"id\": \"test2\",\n  \"label\": \"Programming\"\n}",
+                "raw": "{\n  \"id\": \"test2\",\n  \"label\": \"Philosophy\"\n}",
                 "form": []
             },
             "tests": []
@@ -61,12 +75,64 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2023-08-15T14:23:26.728Z",
-            "modified": "2023-08-15T14:30:16.600Z",
+            "modified": "2023-08-16T15:47:23.052Z",
             "headers": [],
             "params": [],
             "body": {
                 "type": "json",
-                "raw": "{\n  \"id\": \"node2\",\n  \"label\": \"Policy\",\n  \"root\": false,\n  \"positionX\": 5.0,\n  \"positionY\": 10.0,\n  \"rootId\": \"test1\",\n  \"edgeId\": \"edge2\",\n  \"sourceId\": \"test1\"\n}",
+                "raw": "{\n  \"id\": \"node3\",\n  \"label\": \"Policy3\",\n  \"root\": false,\n  \"positionX\": 100.0,\n  \"positionY\": 50.0,\n  \"rootId\": \"test2\",\n  \"edgeId\": \"edge3\",\n  \"sourceId\": \"test2\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "c958a2c0-1a5d-4cff-b2d4-d65e67409a79",
+            "colId": "0234cf67-5410-4e73-b824-a950779083a0",
+            "containerId": "",
+            "name": "update node label",
+            "url": "http://localhost:3000/api/nodelabel",
+            "method": "PATCH",
+            "sortNum": 40000,
+            "created": "2023-08-16T06:03:10.418Z",
+            "modified": "2023-08-16T15:29:13.355Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"node2\",\n  \"label\": \"Ethic\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "704cd0fa-9b41-45ba-ba8d-350078ca6ad6",
+            "colId": "0234cf67-5410-4e73-b824-a950779083a0",
+            "containerId": "",
+            "name": "delete node",
+            "url": "http://localhost:3000/api/node/node2",
+            "method": "DELETE",
+            "sortNum": 50000,
+            "created": "2023-08-16T15:30:02.550Z",
+            "modified": "2023-08-16T15:46:40.368Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5838ca6a-8015-4ce8-97dc-8f5182f6e14b",
+            "colId": "0234cf67-5410-4e73-b824-a950779083a0",
+            "containerId": "",
+            "name": "update doc",
+            "url": "http://localhost:3000/api/document",
+            "method": "PATCH",
+            "sortNum": 60000,
+            "created": "2023-08-16T15:52:42.390Z",
+            "modified": "2023-08-16T15:53:23.390Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"id\": \"node1\",\n  \"data\": \"yesy i love it!\"\n}",
                 "form": []
             },
             "tests": []

@@ -65,7 +65,7 @@ func (d *DB) EdgeDeleteByNode(targetID string) error {
 		return err
 	}
 
-	stmt, err := tx.Prepare("DELETE edge WHERE targetId = ?;")
+	stmt, err := tx.Prepare("DELETE FROM edge WHERE targetId = ?;")
 	if err != nil {
 		return err
 	}

@@ -122,7 +122,10 @@ func (s *Server) handleCreateRootNode(c echo.Context) error {
 
 	// create docs
 	id, _ := gonanoid.New()
-	s.db.DocumentAdd(&types.CreateDocumentReq{ID: id, NodeID: body.ID, Data: ""})
+	err = s.db.DocumentAdd(&types.CreateDocumentReq{ID: id, NodeID: body.ID, Data: ""})
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: fmt.Sprintf("document: %s", err.Error())})
+	}
 
 	return c.JSON(http.StatusOK, types.OkResp{Msg: "node & edge added successfully"})
 }
@@ -140,7 +143,10 @@ func (s *Server) handleAddNode(c echo.Context) error {
 
 	// create docs
 	id, _ := gonanoid.New()
-	s.db.DocumentAdd(&types.CreateDocumentReq{ID: id, NodeID: body.ID, Data: ""})
+	err = s.db.DocumentAdd(&types.CreateDocumentReq{ID: id, NodeID: body.ID, Data: ""})
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: fmt.Sprintf("document: %s", err.Error())})
+	}
 
 	return c.JSON(http.StatusOK, types.OkResp{Msg: "root node created successfully"})
 }
