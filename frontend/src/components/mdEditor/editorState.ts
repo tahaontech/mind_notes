@@ -14,7 +14,7 @@ const useEditorStore = create<EditorState>((set) => ({
     set({ isOpen: true, message });
   },
   close: () => {
-    set({ isOpen: false });
+    set({ isOpen: false, message: '' });
   },
 }));
 

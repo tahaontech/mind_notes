@@ -78,7 +78,7 @@ function App() {
   return (
     <div className="app">
       <Sidebar onAdd={handleAdd}>
-        <h2>Main Titles</h2>
+        <h2 className="text-3xl font-bold underline">Main Titles</h2>
         {!rootsLoaded && "loading"}
         {rootsLoaded && roots.length > 0 && (
           <div>

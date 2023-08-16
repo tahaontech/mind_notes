@@ -14,10 +14,12 @@ const MDEditore: React.FC = () => {
   // toasts
   const notify = (msg: string) => toast.error(msg);
   const [input, setInput] = useState<string>("");
+  const [nodeId, setNodeId] = useState<string>("");
   const editorState = useEditorStore();
 
   useEffect(() => {
     const id = editorState.message;
+    setNodeId(id);
     if (id === "") {
       console.log("fuck react");
     } else {
@@ -30,9 +32,24 @@ const MDEditore: React.FC = () => {
         }
       })
     }
-  }, [editorState.message])
+  }, [editorState.message]);
+
+  const handleSave = async () => {
+    const body = { id: nodeId, data: input };
+    const res = await axiosInstance.patch("/document", body);
+    if (res.status !== 200) {
+      notify("there is an error in saving!");
+    }
+  }
+
+  const handleBack = () => {
+    handleSave();
+    editorState.close();
+  }
   return (
     <div className="main">
+      <button onClick={() => handleSave()}>Save</button>
+      <button onClick={() => handleBack()}>Back</button>
       <textarea className="textarea" value={input} onChange={(e) => setInput(e.target.value)}/>
       <ReactMarkdown 
         children={input} 
