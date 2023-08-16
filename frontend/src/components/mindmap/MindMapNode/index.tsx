@@ -10,10 +10,13 @@ import useConfirmDialogStore from "../../confirmDialog/confirmDialogState";
 
 import { toast } from "react-toastify";
 import BookIcon from "../../Icons/BookIcon";
+import axiosInstance from "../../../utils/axiosInstance";
+import useEditorStore from "../../mdEditor/editorState";
 
 export type NodeData = {
   label: string;
   root: boolean;
+  rootId: string;
 };
 
 function MindMapNode({ id, data }: NodeProps<NodeData>) {
@@ -24,6 +27,7 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
   const canDelete = useStore((state) => state.canDelete);
   const deleteNode = useStore((state) => state.deleteNode);
   const confirmDialogState = useConfirmDialogStore();
+  const editorState = useEditorStore();
   // toasts
   const notify = (msg: string) => toast.error(msg);
   const notifySuccess = (msg: string) => toast.success(msg);
@@ -39,9 +43,22 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
         try {
           const isDeleteable = canDelete(id);
           if (isDeleteable) {
-            // API Request
-            deleteNode(id);
-            notifySuccess("the node deleted successfully.");
+            // API: delete node Request
+            (async () => {
+              try {
+                const res = await axiosInstance.delete(`/node/${id}`);
+                if (res.status !== 200) {
+                  notify("can not delete the node.")
+                } else {
+                  deleteNode(id);
+                  notifySuccess("the node deleted successfully.");
+                }
+              } catch (error) {
+                console.log(error);
+                notify("there is an error in system")
+              }
+            })();
+            
           } else {
             notify("please delete child nodes first.");
           }
@@ -62,6 +79,10 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
       }
     );
   };
+
+  const handleOpenEditor = (id: string) => {
+    editorState.open(id);
+  }
 
   useEffect(() => {
     setTimeout(() => {
@@ -89,10 +110,10 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
           onChange={(evt) => updateNodeLabel(id, evt.target.value)}
           className="input"
           onFocus={() => setFocused(true)}
-          onBlur={() => {
+          onBlur={async () => {
             if (focused) {
-              console.log('Triggered because this input lost focus', data.label);
-              // API update request
+              // update node label
+              await axiosInstance.patch("/nodelabel", { id: id, label: data.label})
               setFocused(false);
             }
           }}
@@ -101,7 +122,7 @@ function MindMapNode({ id, data }: NodeProps<NodeData>) {
         <div onClick={() => handleDelete(id)}  className="nodeIcon">
           <DeleteIcon Disabled={data.root} />
         </div>
-        <div onClick={() => {}} className="nodeIcon">
+        <div onClick={() => handleOpenEditor(id)} className="nodeIcon">
           <BookIcon />
         </div>
       </div>

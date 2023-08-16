@@ -22,7 +22,7 @@ export type RFState = {
   onEdgesChange: OnEdgesChange;
   updateNodeLabel: (nodeId: string, label: string) => void;
   deleteNode: (nodeId: string) => void;
-  addChildNode: (parentNode: Node, position: XYPosition) => void;
+  addChildNode: (parentNode: Node, position: XYPosition) => {node: Node<NodeData>; edge: Edge};
   canDelete: (nodeId: string) => boolean;
 };
 
@@ -77,11 +77,12 @@ const useStore = create<RFState>((set, get) => ({
       throw new Error('please delete child nodes first.')
     }
   },
-  addChildNode: (parentNode: Node, position: XYPosition) => {
+  addChildNode: (parentNode: Node<NodeData>, position: XYPosition) => {
+    const rootId = parentNode.data.root ? parentNode.id : parentNode.data.rootId
     const newNode = {
       id: nanoid(),
       type: "mindmap",
-      data: { label: "New Node", root: false },
+      data: { label: "New Node", root: false, rootId: rootId },
       position,
       dragHandle: ".dragHandle",
       parentNode: parentNode.id,
@@ -97,6 +98,8 @@ const useStore = create<RFState>((set, get) => ({
       nodes: [...get().nodes, newNode],
       edges: [...get().edges, newEdge],
     });
+
+    return { node: newNode, edge: newEdge}
   },
 }));
 

@@ -19,6 +19,28 @@ import MindMapEdge from "./MindMapEdge";
 
 // we need to import the React Flow styles to make it work
 import "reactflow/dist/style.css";
+import axiosInstance from "../../utils/axiosInstance";
+import { toast } from "react-toastify";
+
+type MindmapNodeResp = {
+  id: string;
+  label: string,
+  root: boolean,
+  positionX: number,
+  positionY: number
+}
+
+type MindmapEdgeResp = {
+  id: string;
+  sourceId: string,
+  targetId: string
+}
+
+type MindMapResp = {
+  category: string;
+  nodes: MindmapNodeResp[];
+  edges: MindmapEdgeResp[];
+}
 
 const selector = (state: RFState) => ({
   nodes: state.nodes,
@@ -27,6 +49,7 @@ const selector = (state: RFState) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   addChildNode: state.addChildNode,
+  deleteNode: state.deleteNode,
 });
 
 const nodeTypes = {
@@ -42,14 +65,16 @@ const nodeOrigin: NodeOrigin = [0.5, 0.5];
 const connectionLineStyle = { stroke: "#F6AD55", strokeWidth: 3 };
 const defaultEdgeOptions = { style: connectionLineStyle, type: "mindmap" };
 
-function Flow({catId}: {catId: string}) {
+function Flow({rootId}: {rootId: string;}) {
   const store = useStoreApi();
-  const { nodes, edges, onNodesChange, onEdgesChange, addChildNode, init } = useStore(
+  const { nodes, edges, onNodesChange, onEdgesChange, addChildNode, init, deleteNode } = useStore(
     selector,
     shallow
   );
   const { project } = useReactFlow();
   const connectingNodeId = useRef<string | null>(null);
+
+  const notify = (msg: string) => toast.error(msg);
 
   const getChildNodePosition = (event: MouseEvent, parentNode?: Node) => {
     const { domNode } = store.getState();
@@ -104,8 +129,31 @@ function Flow({catId}: {catId: string}) {
         const childNodePosition = getChildNodePosition(event, parentNode);
 
         if (parentNode && childNodePosition) {
-          addChildNode(parentNode, childNodePosition);
-          // call craete node API
+          const data = addChildNode(parentNode, childNodePosition);
+          // API: call craete node 
+          const callBody = {
+            id: data.node.id,
+            label: data.node.data.label,
+            root: false,
+            positionX: data.node.position.x,
+            positionY: data.node.position.y,
+            rootId: data.node.data.rootId,
+            edgeId: data.edge.id,
+            sourceId: data.edge.source
+          };
+          (async () => {
+            try {
+              const res = await axiosInstance.post("/node", callBody);
+              if (res.status !== 200) {
+                notify("node not added.");
+                deleteNode(data.node.id);
+              }
+            } catch (error) {
+              console.log(error);
+              notify("node not added.");
+              deleteNode(data.node.id);
+            }
+          })();
           const node = (event.target as Element).closest(".react-flow__node");
           if (node) {
             node.querySelector("input")?.focus({ preventScroll: true });
@@ -127,17 +175,37 @@ function Flow({catId}: {catId: string}) {
   )
 
   useEffect(() => {
-    console.log(catId)
-    // retrive nodes and edges based on catId API
-    const rootNode = {
-      id: "root",
-      type: "mindmap", // static in client
-      data: { label: "root node", root: true },
-      position: { x: 0, y: 0 },
-      dragHandle: ".dragHandle", // static in client
-    }
-    init([rootNode], []);
-  }, [])
+    // retrive nodes and edges based on rootId
+    if (rootId === "") return;
+    (async () => {
+      try {
+        const resp = await axiosInstance.get<MindMapResp>(`/mindmap/${rootId}`)
+        if (resp.status === 200) {
+          const nodes = resp.data.nodes.map((v) => { 
+            return {
+              id: v.id,
+              type: "mindmap", // static in client
+              data: { label: v.label, root: v.root, rootId: rootId },
+              position: { x: v.positionX, y: v.positionY },
+              dragHandle: ".dragHandle",
+            }
+          })
+          const edges = resp.data.edges.map((v) => {
+            return {
+              id: v.id,
+              source: v.sourceId,
+              target: v.targetId,
+            }
+          })
+          init(nodes, edges)
+        } else {
+          notify(`server error: ${resp.status}`)
+        }
+      } catch (error) {
+        notify("there is an error in mindmap")
+      }
+    })()
+  }, [rootId])
   
 
   return (

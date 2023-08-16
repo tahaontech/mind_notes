@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -194,15 +195,15 @@ func (s *Server) handleDeleteNode(c echo.Context) error {
 
 	// delete node
 	if err := s.db.NodeDelete(nodeId); err != nil {
-		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: err.Error()})
+		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: fmt.Sprintf("delete node: %s", err.Error())})
 	}
 	// delete edge
 	if err := s.db.EdgeDeleteByNode(nodeId); err != nil {
-		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: err.Error()})
+		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: fmt.Sprintf("delete edge: %s", err.Error())})
 	}
 	// delete duc
 	if err := s.db.DocumentDelete(nodeId); err != nil {
-		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: err.Error()})
+		return c.JSON(http.StatusInternalServerError, types.ErrorResp{Error: fmt.Sprintf("delete docs: %s", err.Error())})
 	}
 
 	return c.JSON(http.StatusOK, types.OkResp{Msg: "node deletd successfully"})

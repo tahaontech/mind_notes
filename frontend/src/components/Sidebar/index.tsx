@@ -3,9 +3,10 @@ import './Sidebar.css'; // Import your CSS file
 
 interface SidebarProps {
   children: React.ReactNode;
+  onAdd: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ children }) => {
+const Sidebar: React.FC<SidebarProps> = ({ children, onAdd }) => {
   // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // const toggleSidebar = () => {
@@ -13,10 +14,9 @@ const Sidebar: React.FC<SidebarProps> = ({ children }) => {
   // };
 
   const isSidebarOpen = true;
-  // create category API
   return (
     <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
-      <button className="toggle-button" onClick={() => {}}>
+      <button className="toggle-button" onClick={() => onAdd()}>
         new title
       </button>
       <div className="content">{children}</div>
