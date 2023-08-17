@@ -48,6 +48,8 @@ using docker compose:
 docker compose up
 ```
 
+Now the app is available on `http://localhost:3000/`
+
 ---
 
 ### build from source
@@ -77,7 +79,9 @@ make run
 
 ```
 
-development tips:
+Now the app is available on `http://localhost:3000/`
+
+## development tips
 
 1. build the UI folder after each frontend change before push:
 

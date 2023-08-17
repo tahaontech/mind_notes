@@ -89,7 +89,7 @@ function App() {
                 className="sidebutton"
               >
                 {el.label}
-                <div>deleted</div>
+                {/* <div>deleted</div> */}
               </button>
             ))}
           </div>
