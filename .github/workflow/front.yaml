@@ -1,0 +1,43 @@
+name: Build and Deploy React Frontend
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build React Frontend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18  # Adjust the version as needed
+
+      - name: Change to 'frontend' Directory
+        run: cd frontend
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Frontend
+        run: npm run build
+
+      - name: Back to Repository Folder
+        run: cd ..
+
+      - name: Commit 'dist' Folder
+        run: |
+          git config user.name "tahatech"
+          git config user.email "thhk2831@gmail.com"
+          git add UI
+          git commit -m "Update 'UI' folder"
+          git push
